@@ -1,6 +1,6 @@
 /**
  * @file        CommandIF_Command.h
- * @brief       カメラマウントコントローラ コマンド定義
+ * @brief       コマンドインタフェース通信ライブラリ コマンド定義
  * @author      Keitetsu
  * @date        2016/12/18
  * @copyright   Copyright (c) 2016 Keitetsu
