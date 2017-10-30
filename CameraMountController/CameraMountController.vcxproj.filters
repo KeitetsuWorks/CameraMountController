@@ -13,5 +13,71 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ソース ファイル\CameraMount">
+      <UniqueIdentifier>{46609ab4-b75c-4e91-888e-10c1bf72aa56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\CameraMount">
+      <UniqueIdentifier>{73ac412f-11af-4e01-a609-980b35c28e53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\CommandIF">
+      <UniqueIdentifier>{3f816885-a1e4-4713-8157-84b6d009f654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\CommandIF">
+      <UniqueIdentifier>{2d04dfd6-a095-40eb-9424-cba2b241f73b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ComPort">
+      <UniqueIdentifier>{a8efa0c1-0075-4883-9d47-7670ca976e9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ComPort">
+      <UniqueIdentifier>{bed27101-6a17-4d7b-9994-a104f2b76d17}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CameraMount\src\CameraMount.c">
+      <Filter>ソース ファイル\CameraMount</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMount\src\CameraMount_EEPROM.c">
+      <Filter>ソース ファイル\CameraMount</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMount\src\CameraMount_Register.c">
+      <Filter>ソース ファイル\CameraMount</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandIF\src\CommandIF.c">
+      <Filter>ソース ファイル\CommandIF</Filter>
+    </ClCompile>
+    <ClCompile Include="ComPort\src\ComPort.c">
+      <Filter>ソース ファイル\ComPort</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CameraMount\include\CameraMount.h">
+      <Filter>ヘッダー ファイル\CameraMount</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMount\include\CameraMount_EEPROM.h">
+      <Filter>ヘッダー ファイル\CameraMount</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMount\include\CameraMount_Register.h">
+      <Filter>ヘッダー ファイル\CameraMount</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandIF\include\CommandIF.h">
+      <Filter>ヘッダー ファイル\CommandIF</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandIF\include\CommandIF_Command.h">
+      <Filter>ヘッダー ファイル\CommandIF</Filter>
+    </ClInclude>
+    <ClInclude Include="ComPort\include\ComPort.h">
+      <Filter>ヘッダー ファイル\ComPort</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CameraMountController.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
