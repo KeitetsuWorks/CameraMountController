@@ -110,7 +110,7 @@ DWORD CameraMount_getEEPROMSize(DWORD eepromIndex);
  * @brief   EEPROM読込み処理
  * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
  * @param[in]       eepromIndex     EEPROMインデックス
- * @retuen          EEPROM読込みデータ格納先のポインタ
+ * @return          EEPROM読込みデータ格納先のポインタ
  */
 LPVOID CameraMount_readEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex);
 

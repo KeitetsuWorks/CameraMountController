@@ -124,7 +124,7 @@ DWORD CameraMount_getRegisterSize(DWORD registerIndex);
  * @brief   レジスタ読込み処理
  * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
  * @param[in]       registerIndex   レジスタインデックス
- * @retuen          レジスタ読込みデータ格納先のポインタ
+ * @return          レジスタ読込みデータ格納先のポインタ
  */
 LPVOID CameraMount_readRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex);
 

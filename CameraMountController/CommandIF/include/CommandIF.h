@@ -115,7 +115,7 @@ BOOL CommandIF_execCommand_GetVersion(COMMANDIF_T *cmdIF);
  * @param[in]       cmdIF           コマンドインタフェース情報構造体
  * @param[in]       registerIndex   レジスタインデックス
  * @param[out]      readBytes       読込みバイト数
- * @retuen          レジスタ読込みデータ格納先のポインタ
+ * @return          レジスタ読込みデータ格納先のポインタ
  */
 LPBYTE CommandIF_execCommand_ReadRegister(COMMANDIF_T *cmdIF, DWORD registerIndex, LPDWORD readBytes);
 
@@ -137,7 +137,7 @@ BOOL CommandIF_execCommand_WriteRegister(COMMANDIF_T *cmdIF, DWORD registerIndex
  * @param[in]       cmdIF           コマンドインタフェース情報構造体
  * @param[in]       eepromIndex     EEPROMインデックス
  * @param[out]      readBytes       読込みバイト数
- * @retuen          EEPROM読込みデータ格納先のポインタ
+ * @return          EEPROM読込みデータ格納先のポインタ
  */
 LPBYTE CommandIF_execCommand_ReadEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, LPDWORD readBytes);
 
@@ -147,7 +147,7 @@ LPBYTE CommandIF_execCommand_ReadEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, L
  * @param[in]       cmdIF           コマンドインタフェース情報構造体
  * @param[in]       eepromIndex     EEPROMインデックス
  * @param[in]       data            EEPROM書込みデータ格納先のポインタ
- * @param[in]       dataSize        EEPROM書込みデータのバイト数
+ * @param[in]       dataBytes       EEPROM書込みデータのバイト数
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
