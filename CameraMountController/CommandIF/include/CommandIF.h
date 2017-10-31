@@ -41,9 +41,9 @@
  */
 typedef struct CommandIF_st {
     COMPORT_T comPort;              /*!< シリアルポート情報構造体 */
-    uint8_t deviceType;             /*!< デバイスタイプ */
-    uint8_t deviceVersion;          /*!< デバイスバージョン */
-    uint8_t deviceRevision;         /*!< デバイスリビジョン */
+    BYTE deviceType;                /*!< デバイスタイプ */
+    BYTE deviceVersion;             /*!< デバイスバージョン */
+    BYTE deviceRevision;            /*!< デバイスリビジョン */
 } COMMANDIF_T;
 
 

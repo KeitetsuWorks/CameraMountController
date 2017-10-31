@@ -25,22 +25,22 @@
  * @param[in]       cmdIF               コマンドインタフェース情報構造体
  * @param[in]       commandOpcode       コマンドオペコード
  * @param[in]       commandOperand      コマンドオペランド格納先のポインタ
- * @param[in]       commandOperandSize  コマンドオペランドのサイズ
+ * @param[in]       commandOperandBytes コマンドオペランドのバイト数
  * @retval          TRUE                正常終了
  * @retval          FALSE               異常終了
  */
-static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandSize);
+static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandBytes);
 
 
 /**
  * @brief   コマンドを生成する
  * @param[in]       commandOpcode       コマンドオペコード
  * @param[in]       commandOperand      コマンドオペランド格納先のポインタ
- * @param[in]       commandOperandSize  コマンドオペランドのサイズ
+ * @param[in]       commandOperandBytes コマンドオペランドのバイト数
  * @param[out]      commandBytes        コマンド長
  * @return          コマンド
  */
-static LPBYTE CommandIF_createCommand(BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandSize, LPDWORD commandBytes);
+static LPBYTE CommandIF_createCommand(BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandBytes, LPDWORD commandBytes);
 
 
 /**
@@ -145,7 +145,7 @@ BOOL CommandIF_execCommand_GetVersion(COMMANDIF_T *cmdIF)
     retval = CommandIF_sendCommand(cmdIF, COMMAND_GET_VERSION, NULL, 0);
         
     /* コマンドレスポンスを受信 */
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         response = CommandIF_receiveResponse(cmdIF);
         if (response == NULL) {
             result = FALSE;
@@ -197,7 +197,7 @@ LPBYTE CommandIF_execCommand_ReadRegister(COMMANDIF_T *cmdIF, DWORD registerInde
     );
 
     /* コマンドレスポンスを受信 */
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         response = CommandIF_receiveResponse(cmdIF);
         if (response != NULL) {
             /* レスポンスからコマンド実行結果を取得 */
@@ -265,7 +265,7 @@ BOOL CommandIF_execCommand_WriteRegister(COMMANDIF_T *cmdIF, DWORD registerIndex
     }
 
     /* コマンドレスポンスを受信 */
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         response = CommandIF_receiveResponse(cmdIF);
         if (response == NULL) {
             result = FALSE;
@@ -319,7 +319,7 @@ LPBYTE CommandIF_execCommand_ReadEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, L
     );
 
     /* コマンドレスポンスを受信 */
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         response = CommandIF_receiveResponse(cmdIF);
         if (response != NULL) {
             /* レスポンスからコマンド実行結果を取得 */
@@ -387,7 +387,7 @@ BOOL CommandIF_execCommand_WriteEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, LP
     }
 
     /* コマンドレスポンスを受信 */
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         response = CommandIF_receiveResponse(cmdIF);
         if (response == NULL) {
             result = FALSE;
@@ -418,7 +418,7 @@ BOOL CommandIF_execCommand_WriteEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, LP
 }
 
 
-static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandSize)
+static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandBytes)
 {
     LPBYTE command;
     DWORD commandBytes;
@@ -428,7 +428,7 @@ static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE
 
     if (cmdIF->comPort.comHandle != INVALID_HANDLE_VALUE) {
         /* コマンドを作成 */
-        command = CommandIF_createCommand(commandOpcode, commandOperand, commandOperandSize, &commandBytes);
+        command = CommandIF_createCommand(commandOpcode, commandOperand, commandOperandBytes, &commandBytes);
 
         /* コマンドを送信 */
         if (command != NULL) {
@@ -451,7 +451,7 @@ static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE
 }
 
 
-static LPBYTE CommandIF_createCommand(BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandSize, LPDWORD commandBytes)
+static LPBYTE CommandIF_createCommand(BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandBytes, LPDWORD commandBytes)
 {
     LPBYTE commandTemp;
     DWORD commandBytesTemp;
@@ -459,9 +459,9 @@ static LPBYTE CommandIF_createCommand(BYTE commandOpcode, LPBYTE commandOperand,
     *commandBytes = 0;
     commandTemp = NULL;
 
-    if ((commandOperandSize >= 0) && (commandOperandSize <= COMMAND_OPERAND_LENGTH_MAX)) {
+    if ((commandOperandBytes >= 0) && (commandOperandBytes <= COMMAND_OPERAND_LENGTH_MAX)) {
         /* コマンド長を算出 */
-        commandBytesTemp = COMMAND_OPCODE_LENGTH + commandOperandSize;
+        commandBytesTemp = COMMAND_OPCODE_LENGTH + commandOperandBytes;
 
         /* コマンド用のメモリ領域を確保 */
         commandTemp = (LPBYTE)malloc(sizeof(BYTE) * commandBytesTemp);
@@ -472,9 +472,9 @@ static LPBYTE CommandIF_createCommand(BYTE commandOpcode, LPBYTE commandOperand,
             commandTemp[0] = (commandOpcode << 4) | (BYTE)commandBytesTemp;
 
             /* オペランドを設定 */
-            if (commandOperandSize > 0) {
+            if (commandOperandBytes > 0) {
                 if (commandOperand != NULL) {
-                    memcpy(&commandTemp[1], commandOperand, (sizeof(BYTE) * commandOperandSize));
+                    memcpy(&commandTemp[1], commandOperand, (sizeof(BYTE) * commandOperandBytes));
                 }
                 else {
                     free(commandTemp);
@@ -509,7 +509,7 @@ static LPBYTE CommandIF_receiveResponse(COMMANDIF_T *cmdIF)
         );
 
         /* レスポンスヘッダからレスポンス長を取得 */
-        if (retval == TRUE) {
+        if (retval != FALSE) {
             responseBytes = CommandIF_getResponseBytes(&responseHeader);
         }
         else {
@@ -532,7 +532,7 @@ static LPBYTE CommandIF_receiveResponse(COMMANDIF_T *cmdIF)
                 &response[1],
                 (responseBytes - 1)
             );
-            if (retval != TRUE) {
+            if (retval == FALSE) {
                 free(response);
                 response = NULL;
             }

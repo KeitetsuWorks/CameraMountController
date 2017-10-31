@@ -60,7 +60,7 @@ DWORD CameraMount_getEEPROMSize(DWORD eepromIndex)
     size = 0;
 
     retval = CameraMount_eepromExists(eepromIndex);
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         size = EEPROM_table[eepromIndex].size;
     }
 
@@ -104,7 +104,7 @@ BOOL CameraMount_writeEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex, LPVO
 
     /* EEPORM書込みを実行 */
     if (eepromSize > 0) {
-        result = CommandIF_execCommand_WriteRegister(&(cameraMount->cmdIF), eepromIndex, data, eepromSize);
+        result = CommandIF_execCommand_WriteEEPROM(&(cameraMount->cmdIF), eepromIndex, data, eepromSize);
     }
     else {
         result = FALSE;
@@ -141,7 +141,7 @@ VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
         _tprintf(_T(", %d Byte"), EEPROM_table[eepromIndex].size);
 
         /* 符号有無を表示 */
-        if (EEPROM_table[eepromIndex].sign == TRUE) {
+        if (EEPROM_table[eepromIndex].sign != FALSE) {
             _tprintf(_T(", S"));
         }
         else {
@@ -149,7 +149,7 @@ VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
         }
 
         /* 書込み可否を表示 */
-        if (EEPROM_table[eepromIndex].write_enable == TRUE) {
+        if (EEPROM_table[eepromIndex].write_enable != FALSE) {
             _tprintf(_T(", W/R"));
         }
         else {
@@ -188,11 +188,11 @@ BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
     BOOL result;
 
     _tprintf(_T("[E:0x%02x] "), eepromIndex);
-    if (EEPROM_table[eepromIndex].write_enable == TRUE) {
+    if (EEPROM_table[eepromIndex].write_enable != FALSE) {
         /* EEPROM書込み処理 */
         switch (EEPROM_table[eepromIndex].size) {
         case 1:
-            if (EEPROM_table[eepromIndex].sign == TRUE) {
+            if (EEPROM_table[eepromIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%d"), &(data._s32));
             }
             else {
@@ -200,7 +200,7 @@ BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
             }
             break;
         case 2:
-            if (EEPROM_table[eepromIndex].sign == TRUE) {
+            if (EEPROM_table[eepromIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%hd"), &(data._s16[0]));
             }
             else {
@@ -208,7 +208,7 @@ BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
             }
             break;
         case 4:
-            if (EEPROM_table[eepromIndex].sign == TRUE) {
+            if (EEPROM_table[eepromIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%d"), &(data._s32));
             }
             else {
@@ -220,7 +220,7 @@ BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
             break;
         }
         result = CameraMount_writeEEPROM(cameraMount, eepromIndex, &data);
-        if (result == TRUE) {
+        if (result != FALSE) {
             _tprintf(_T("書込みが成功しました\n"));
         }
         else {

@@ -65,7 +65,7 @@ DWORD CameraMount_getRegisterSize(DWORD registerIndex)
     size = 0;
 
     retval = CameraMount_registerExists(registerIndex);
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         size = Register_table[registerIndex].size;
     }
 
@@ -146,7 +146,7 @@ VOID CameraMount_printRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
         _tprintf(_T(", %d Byte"), Register_table[registerIndex].size);
 
         /* 符号有無を表示 */
-        if (Register_table[registerIndex].sign == TRUE) {
+        if (Register_table[registerIndex].sign != FALSE) {
             _tprintf(_T(", S"));
         }
         else {
@@ -154,7 +154,7 @@ VOID CameraMount_printRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
         }
 
         /* 書込み可否を表示 */
-        if (Register_table[registerIndex].write_enable == TRUE) {
+        if (Register_table[registerIndex].write_enable != FALSE) {
             _tprintf(_T(", W/R"));
         }
         else {
@@ -193,11 +193,11 @@ BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
     BOOL result;
 
     _tprintf(_T("[R:0x%02x] "), registerIndex);
-    if (Register_table[registerIndex].write_enable == TRUE) {
+    if (Register_table[registerIndex].write_enable != FALSE) {
         /* レジスタ書込み処理 */
         switch (Register_table[registerIndex].size) {
         case 1:
-            if (Register_table[registerIndex].sign == TRUE) {
+            if (Register_table[registerIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%d"), &(data._s32));
             }
             else {
@@ -205,7 +205,7 @@ BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
             }
             break;
         case 2:
-            if (Register_table[registerIndex].sign == TRUE) {
+            if (Register_table[registerIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%hd"), &(data._s16[0]));
             }
             else {
@@ -213,7 +213,7 @@ BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
             }
             break;
         case 4:
-            if (Register_table[registerIndex].sign == TRUE) {
+            if (Register_table[registerIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%d"), &(data._s32));
             }
             else {
@@ -225,7 +225,7 @@ BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
             break;
         }
         result = CameraMount_writeRegister(cameraMount, registerIndex, &data);
-        if (result == TRUE) {
+        if (result != FALSE) {
             _tprintf(_T("書込みが成功しました\n"));
         }
         else {

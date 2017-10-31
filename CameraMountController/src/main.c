@@ -58,17 +58,20 @@ int _tmain(int argc, _TCHAR* argv[])
         iniPath
     );
 
-    if(CameraMount_open(&cameraMount, comName) != TRUE){
+    if(CameraMount_open(&cameraMount, comName) == FALSE){
         exit(EXIT_FAILURE);
     }
 
     CameraMount_printVersion(&cameraMount);
     supportedVersion = CameraMount_validateVersion(&cameraMount);
-    if (supportedVersion == TRUE) {
+    if (supportedVersion != FALSE) {
         _tprintf(_T("対応バージョンです\n"));
     }
     else {
         _tprintf(_T("未対応バージョンです\n"));
+
+        CameraMount_close(&cameraMount);
+
         exit(EXIT_FAILURE);
     }
 

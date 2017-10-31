@@ -22,7 +22,7 @@ BOOL CameraMount_open(CAMERAMOUNT_T *cameraMount, LPCTSTR comName)
 
     result = CommandIF_open(&(cameraMount->cmdIF), comName);
     _tprintf(_T("カメラマウントコントローラの接続に"));
-    if (result == TRUE) {
+    if (result != FALSE) {
         _tprintf(_T("成功しました"));
     }
     else {
@@ -40,7 +40,7 @@ BOOL CameraMount_close(CAMERAMOUNT_T *cameraMount)
 
     result = CommandIF_close(&(cameraMount->cmdIF));
     _tprintf(_T("カメラマウントコントローラの切断に"));
-    if (result == TRUE) {
+    if (result != FALSE) {
         _tprintf(_T("成功しました"));
     }
     else {
@@ -69,7 +69,7 @@ VOID CameraMount_printVersion(CAMERAMOUNT_T *cameraMount)
     BOOL retval;
 
     retval = CommandIF_execCommand_GetVersion(&(cameraMount->cmdIF));
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         _tprintf(_T("デバイスタイプ: 0x%02x, バージョン: %d.%d\n"),
             cameraMount->cmdIF.deviceType,
             cameraMount->cmdIF.deviceVersion,
@@ -92,7 +92,7 @@ BOOL CameraMount_validateVersion(CAMERAMOUNT_T *cameraMount)
     result = TRUE;
 
     retval = CommandIF_execCommand_GetVersion(&(cameraMount->cmdIF));
-    if (retval == TRUE) {
+    if (retval != FALSE) {
         if ((cameraMount->cmdIF.deviceType != CAMERAMOUNT_SUPPORTED_TYPE)
             || (cameraMount->cmdIF.deviceVersion != CAMERAMOUNT_SUPPORTED_VERSION)
             || (cameraMount->cmdIF.deviceRevision != CAMERAMOUNT_SUPPORTED_REVISION)) {
