@@ -68,7 +68,7 @@ int _tmain(int argc, _TCHAR* argv[])
         _tprintf(_T("対応バージョンです\n"));
     }
     else {
-        _tprintf(_T("未対応バージョンです\n"));
+        _tprintf(_T("非対応バージョンです\n"));
 
         CameraMount_close(&cameraMount);
 
