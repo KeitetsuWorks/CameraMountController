@@ -190,7 +190,13 @@ VOID CameraMount_printAllRegister(CAMERAMOUNT_T *cameraMount)
 BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
 {
     DATA32_U data;
+    DWORD numberOfFields;
+    BOOL retval;
     BOOL result;
+
+    data._s32 = 0;
+    numberOfFields = 0;
+    result = TRUE;
 
     _tprintf(_T("[R:0x%02x] "), registerIndex);
     if (Register_table[registerIndex].write_enable != FALSE) {
@@ -198,38 +204,52 @@ BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
         switch (Register_table[registerIndex].size) {
         case 1:
             if (Register_table[registerIndex].sign != FALSE) {
-                _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%d"), &(data._s32));
+                _tprintf(_T("新しい値 (符号あり10進数): "));
+                numberOfFields = _tscanf_s(_T("%d"), &(data._s32));
             }
             else {
-                _tprintf(_T("新しい値 (符号なし10進数): ")); _tscanf_s(_T("%u"), &(data._u32));
+                _tprintf(_T("新しい値 (符号なし10進数): "));
+                numberOfFields = _tscanf_s(_T("%u"), &(data._u32));
             }
             break;
         case 2:
             if (Register_table[registerIndex].sign != FALSE) {
-                _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%hd"), &(data._s16[0]));
+                _tprintf(_T("新しい値 (符号あり10進数): "));
+                numberOfFields = _tscanf_s(_T("%hd"), &(data._s16[0]));
             }
             else {
-                _tprintf(_T("新しい値 (符号なし10進数): ")); _tscanf_s(_T("%hu"), &(data._u16[0]));
+                _tprintf(_T("新しい値 (符号なし10進数): "));
+                numberOfFields = _tscanf_s(_T("%hu"), &(data._u16[0]));
             }
             break;
         case 4:
             if (Register_table[registerIndex].sign != FALSE) {
-                _tprintf(_T("新しい値 (符号あり10進数): ")); _tscanf_s(_T("%d"), &(data._s32));
+                _tprintf(_T("新しい値 (符号あり10進数): "));
+                numberOfFields = _tscanf_s(_T("%d"), &(data._s32));
             }
             else {
-                _tprintf(_T("新しい値 (符号なし10進数): ")); _tscanf_s(_T("%u"), &(data._u32));
+                _tprintf(_T("新しい値 (符号なし10進数): "));
+                numberOfFields = _tscanf_s(_T("%u"), &(data._u32));
             }
             break;
         default:
             _tprintf(_T("未対応のレジスタデータサイズです\n"));
             break;
         }
-        result = CameraMount_writeRegister(cameraMount, registerIndex, &data);
-        if (result != FALSE) {
-            _tprintf(_T("書込みが成功しました\n"));
+
+        if (numberOfFields == 1) {
+            retval = CameraMount_writeRegister(cameraMount, registerIndex, &data);
+            if (retval != FALSE) {
+                _tprintf(_T("書込みが成功しました\n"));
+            }
+            else {
+                _tprintf(_T("書込みが失敗しました\n"));
+                result = FALSE;
+            }
         }
         else {
-            _tprintf(_T("書込みが失敗しました\n"));
+            _tprintf(_T("不正な値です\n"));
+            result = FALSE;
         }
     }
     else {

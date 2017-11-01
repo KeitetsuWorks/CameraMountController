@@ -77,7 +77,7 @@ VOID CameraMount_printVersion(CAMERAMOUNT_T *cameraMount)
         );
     }
     else {
-        _tprintf(_T("バージョン情報の取得に失敗しました"));
+        _tprintf(_T("バージョン情報の取得に失敗しました\n"));
     }
 
     return;
