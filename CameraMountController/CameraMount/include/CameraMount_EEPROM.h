@@ -127,11 +127,18 @@ BOOL CameraMount_writeEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex, LPVO
 
 
 /**
- * @brief   EEPROMデータ表示処理
+ * @brief   EEPROMデータ表示処理（EEPROMインデックス指定）
  * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
  * @param[in]       eepromIndex     EEPROMインデックス
  */
-VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex);
+VOID CameraMount_printEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex);
+
+
+/**
+ * @brief   EEPROMデータ表示処理
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ */
+VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount);
 
 
 /**
@@ -142,10 +149,17 @@ VOID CameraMount_printAllEEPROM(CAMERAMOUNT_T *cameraMount);
 
 
 /**
- * @brief   レジスタデータ編集処理
+ * @brief   レジスタデータ編集処理（EEPROMインデックス指定）
  * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
  * @param[in]       eepromIndex     EEPROMインデックス
  */
-BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex);
+BOOL CameraMount_editEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex);
+
+
+/**
+ * @brief   レジスタデータ編集処理
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ */
+BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount);
 
 #endif  /* __CAMERAMOUNT_EEPROM_H__ */

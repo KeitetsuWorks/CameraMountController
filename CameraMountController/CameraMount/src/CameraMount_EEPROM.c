@@ -24,11 +24,11 @@
 static EEPROM_T EEPROM_table[] = {
     { _T(EEPROM_LABEL_SERVO_INITIAL_CTRL_MODE),             EEPROM_SIZE_SERVO_INITIAL_CTRL_MODE,                FALSE,  TRUE },
     { _T(EEPROM_LABEL_SERVO_POSITION_FACTOR),               EEPROM_SIZE_SERVO_POSITION_FACTOR,                  FALSE,  TRUE },
-    { _T(EEPROM_LABEL_PAN_SERVO_INITIAL_ANGLE),             EEPROM_SIZE_PAN_SERVO_INITIAL_ANGLE,                FALSE,  TRUE },
+    { _T(EEPROM_LABEL_PAN_SERVO_INITIAL_ANGLE),             EEPROM_SIZE_PAN_SERVO_INITIAL_ANGLE,                TRUE,   TRUE },
     { _T(EEPROM_LABEL_PAN_SERVO_NEUTRAL_POSITION),          EEPROM_SIZE_PAN_SERVO_NEUTRAL_POSITION,             FALSE,  TRUE },
     { _T(EEPROM_LABEL_PAN_SERVO_MIN_POSITION),              EEPROM_SIZE_PAN_SERVO_MIN_POSITION,                 FALSE,  TRUE },
     { _T(EEPROM_LABEL_PAN_SERVO_MAX_POSITION),              EEPROM_SIZE_PAN_SERVO_MAX_POSITION,                 FALSE,  TRUE },
-    { _T(EEPROM_LABEL_TILT_SERVO_INITIAL_ANGLE),            EEPROM_SIZE_TILT_SERVO_INITIAL_ANGLE,               FALSE,  TRUE },
+    { _T(EEPROM_LABEL_TILT_SERVO_INITIAL_ANGLE),            EEPROM_SIZE_TILT_SERVO_INITIAL_ANGLE,               TRUE,   TRUE },
     { _T(EEPROM_LABEL_TILT_SERVO_NEUTRAL_POSITION),         EEPROM_SIZE_TILT_SERVO_NEUTRAL_POSITION,            FALSE,  TRUE },
     { _T(EEPROM_LABEL_TILT_SERVO_MIN_POSITION),             EEPROM_SIZE_TILT_SERVO_MIN_POSITION,                FALSE,  TRUE },
     { _T(EEPROM_LABEL_TILT_SERVO_MAX_POSITION),             EEPROM_SIZE_TILT_SERVO_MAX_POSITION,                FALSE,  TRUE },
@@ -42,10 +42,10 @@ BOOL CameraMount_eepromExists(DWORD eepromIndex)
 {
     BOOL result;
 
-    result = FALSE;
+    result = TRUE;
 
-    if ((eepromIndex >= 0) && (eepromIndex < EEPROM_INDEX_NUM)) {
-        result = TRUE;
+    if (eepromIndex >= EEPROM_INDEX_NUM) {
+        result = FALSE;
     }
 
     return result;
@@ -114,7 +114,7 @@ BOOL CameraMount_writeEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex, LPVO
 }
 
 
-VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
+VOID CameraMount_printEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
 {
     DATA32_U *eepromData;
 
@@ -170,19 +170,39 @@ VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
 }
 
 
-VOID CameraMount_printAllEEPROM(CAMERAMOUNT_T *cameraMount)
+VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount)
 {
+    DWORD numberOfFields;
     DWORD eepromIndex;
 
-    for (eepromIndex = 0; eepromIndex < EEPROM_INDEX_NUM; eepromIndex++) {
-        CameraMount_printEEPROM(cameraMount, eepromIndex);
+    _tprintf(_T("インデックス: "));
+    numberOfFields = _tscanf_s(_T("%u%*[^\n]"), &eepromIndex);
+    _tscanf_s(_T("%*c"));
+
+    if (numberOfFields == 1) {
+        CameraMount_printEEPROM_i(cameraMount, eepromIndex);
+    }
+    else {
+        _tprintf(_T("不正なインデックスです\n"));
     }
 
     return;
 }
 
 
-BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
+VOID CameraMount_printAllEEPROM(CAMERAMOUNT_T *cameraMount)
+{
+    DWORD eepromIndex;
+
+    for (eepromIndex = 0; eepromIndex < EEPROM_INDEX_NUM; eepromIndex++) {
+        CameraMount_printEEPROM_i(cameraMount, eepromIndex);
+    }
+
+    return;
+}
+
+
+BOOL CameraMount_editEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
 {
     DATA32_U data;
     DWORD numberOfFields;
@@ -200,31 +220,37 @@ BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
         case 1:
             if (EEPROM_table[eepromIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): "));
-                numberOfFields = _tscanf_s(_T("%d"), &(data._s32));
+                numberOfFields = _tscanf_s(_T("%d%*[^\n]"), &(data._s32));
+                _tscanf_s(_T("%*c"));
             }
             else {
                 _tprintf(_T("新しい値 (符号なし10進数): "));
-                numberOfFields = _tscanf_s(_T("%u"), &(data._u32));
+                numberOfFields = _tscanf_s(_T("%u%*[^\n]"), &(data._u32));
+                _tscanf_s(_T("%*c"));
             }
             break;
         case 2:
             if (EEPROM_table[eepromIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): "));
-                numberOfFields = _tscanf_s(_T("%hd"), &(data._s16[0]));
+                numberOfFields = _tscanf_s(_T("%hd%*[^\n]"), &(data._s16[0]));
+                _tscanf_s(_T("%*c"));
             }
             else {
                 _tprintf(_T("新しい値 (符号なし10進数): "));
-                numberOfFields = _tscanf_s(_T("%hu"), &(data._u16[0]));
+                numberOfFields = _tscanf_s(_T("%hu%*[^\n]"), &(data._u16[0]));
+                _tscanf_s(_T("%*c"));
             }
             break;
         case 4:
             if (EEPROM_table[eepromIndex].sign != FALSE) {
                 _tprintf(_T("新しい値 (符号あり10進数): "));
-                numberOfFields = _tscanf_s(_T("%d"), &(data._s32));
+                numberOfFields = _tscanf_s(_T("%d%*[^\n]"), &(data._s32));
+                _tscanf_s(_T("%*c"));
             }
             else {
                 _tprintf(_T("新しい値 (符号なし10進数): "));
-                numberOfFields = _tscanf_s(_T("%u"), &(data._u32));
+                numberOfFields = _tscanf_s(_T("%u%*[^\n]"), &(data._u32));
+                _tscanf_s(_T("%*c"));
             }
             break;
         default:
@@ -249,6 +275,30 @@ BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
     }
     else {
         _tprintf(_T("書込みが禁止されています\n"));
+        result = FALSE;
+    }
+
+    return result;
+}
+
+
+BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount)
+{
+    DWORD numberOfFields;
+    DWORD eepromIndex;
+    BOOL result;
+
+    result = TRUE;
+
+    _tprintf(_T("インデックス: "));
+    numberOfFields = _tscanf_s(_T("%u%*[^\n]"), &eepromIndex);
+    _tscanf_s(_T("%*c"));
+
+    if (numberOfFields == 1) {
+        result = CameraMount_editEEPROM_i(cameraMount, eepromIndex);
+    }
+    else {
+        _tprintf(_T("不正なインデックスです\n"));
         result = FALSE;
     }
 

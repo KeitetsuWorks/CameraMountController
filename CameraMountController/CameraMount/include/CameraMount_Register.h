@@ -141,11 +141,18 @@ BOOL CameraMount_writeRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex, 
 
 
 /**
- * @brief   レジスタデータ表示処理
+ * @brief   レジスタデータ表示処理（レジスタインデックス指定）
  * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
  * @param[in]       registerIndex   レジスタインデックス
  */
-VOID CameraMount_printRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex);
+VOID CameraMount_printRegister_i(CAMERAMOUNT_T *cameraMount, DWORD registerIndex);
+
+
+/**
+ * @brief   レジスタデータ表示処理
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ */
+VOID CameraMount_printRegister(CAMERAMOUNT_T *cameraMount);
 
 
 /**
@@ -156,10 +163,17 @@ VOID CameraMount_printAllRegister(CAMERAMOUNT_T *cameraMount);
 
 
 /**
- * @brief   レジスタデータ編集処理
+ * @brief   レジスタデータ編集処理（レジスタインデックス指定）
  * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
  * @param[in]       registerIndex   レジスタインデックス
  */
-BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex);
+BOOL CameraMount_editRegister_i(CAMERAMOUNT_T *cameraMount, DWORD registerIndex);
+
+
+/**
+ * @brief   レジスタデータ編集処理
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ */
+BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount);
 
 #endif  /* __CAMERAMOUNT_REGISTER_H__ */
