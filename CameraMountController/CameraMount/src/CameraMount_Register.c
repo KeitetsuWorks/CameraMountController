@@ -179,12 +179,20 @@ VOID CameraMount_printRegister(CAMERAMOUNT_T *cameraMount)
 {
     DWORD numberOfFields;
     DWORD registerIndex;
+    BOOL retval;
 
     _tprintf(_T("インデックス: "));
     numberOfFields = _tscanf_s(_T("%u%*[^\n]"), &registerIndex);
     _tscanf_s(_T("%*c"));
 
     if (numberOfFields == 1) {
+        retval = CameraMount_registerExists(registerIndex);
+    }
+    else {
+        retval = FALSE;
+    }
+
+    if (retval == TRUE) {
         CameraMount_printRegister_i(cameraMount, registerIndex);
     }
     else {
@@ -291,6 +299,7 @@ BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount)
 {
     DWORD numberOfFields;
     DWORD registerIndex;
+    BOOL retval;
     BOOL result;
 
     result = TRUE;
@@ -300,6 +309,13 @@ BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount)
     _tscanf_s(_T("%*c"));
 
     if (numberOfFields == 1) {
+        retval = CameraMount_registerExists(registerIndex);
+    }
+    else {
+        retval = FALSE;
+    }
+
+    if (retval == TRUE) {
         result = CameraMount_editRegister_i(cameraMount, registerIndex);
     }
     else {

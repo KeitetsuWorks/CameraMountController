@@ -174,12 +174,20 @@ VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount)
 {
     DWORD numberOfFields;
     DWORD eepromIndex;
+    BOOL retval;
 
     _tprintf(_T("インデックス: "));
     numberOfFields = _tscanf_s(_T("%u%*[^\n]"), &eepromIndex);
     _tscanf_s(_T("%*c"));
 
     if (numberOfFields == 1) {
+        retval = CameraMount_eepromExists(eepromIndex);
+    }
+    else {
+        retval = FALSE;
+    }
+
+    if (retval == TRUE) {
         CameraMount_printEEPROM_i(cameraMount, eepromIndex);
     }
     else {
@@ -286,6 +294,7 @@ BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount)
 {
     DWORD numberOfFields;
     DWORD eepromIndex;
+    BOOL retval;
     BOOL result;
 
     result = TRUE;
@@ -295,6 +304,13 @@ BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount)
     _tscanf_s(_T("%*c"));
 
     if (numberOfFields == 1) {
+        retval = CameraMount_eepromExists(eepromIndex);
+    }
+    else {
+        retval = FALSE;
+    }
+
+    if (retval == TRUE) {
         result = CameraMount_editEEPROM_i(cameraMount, eepromIndex);
     }
     else {
