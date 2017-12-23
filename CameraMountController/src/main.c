@@ -38,7 +38,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
     TCHAR iniPath[MAX_PATH];
     TCHAR comName[COMNAME_BUF_SIZE];
-    CAMERAMOUNT_T cameraMount;
+    CAMERAMOUNT cameraMount;
     BOOL supportedVersion;
     BOOL flagExitMenu;
     TCHAR menuInputBuffer[MENU_INPUT_BUF_SIZE];
@@ -65,20 +65,21 @@ int _tmain(int argc, _TCHAR* argv[])
     );
 
     /* カメラマウントコントローラを接続しているシリアルポートを開く */
-    if(CameraMount_open(&cameraMount, comName) == FALSE){
+    cameraMount = CameraMount_open(comName);
+    if (cameraMount == NULL) {
         exit(EXIT_FAILURE);
     }
 
     /* カメラマウントコントローラが対応バージョンか検証する */
-    CameraMount_printVersion(&cameraMount);
-    supportedVersion = CameraMount_validateVersion(&cameraMount);
+    CameraMount_printVersion(cameraMount);
+    supportedVersion = CameraMount_validateVersion(cameraMount);
     if (supportedVersion != FALSE) {
         _tprintf(_T("対応バージョンです\n"));
     }
     else {
         _tprintf(_T("非対応バージョンです\n"));
 
-        CameraMount_close(&cameraMount);
+        CameraMount_close(cameraMount);
 
         exit(EXIT_FAILURE);
     }
@@ -103,28 +104,28 @@ int _tmain(int argc, _TCHAR* argv[])
         if (numberOfFields == 1) {
             switch (menuInputBuffer[0]) {
             case _T('c'):
-                CameraMount_reset(&cameraMount);
+                CameraMount_reset(cameraMount);
                 break;
             case _T('i'):
-                CameraMount_initialize(&cameraMount);
+                CameraMount_initialize(cameraMount);
                 break;
             case _T('r'):
-                CameraMount_printRegister(&cameraMount);
+                CameraMount_printRegister(cameraMount);
                 break;
             case _T('w'):
-                CameraMount_editRegister(&cameraMount);
+                CameraMount_editRegister(cameraMount);
                 break;
             case _T('a'):
-                CameraMount_printAllRegister(&cameraMount);
+                CameraMount_printAllRegister(cameraMount);
                 break;
             case _T('e'):
-                CameraMount_printEEPROM(&cameraMount);
+                CameraMount_printEEPROM(cameraMount);
                 break;
             case _T('f'):
-                CameraMount_editEEPROM(&cameraMount);
+                CameraMount_editEEPROM(cameraMount);
                 break;
             case _T('g'):
-                CameraMount_printAllEEPROM(&cameraMount);
+                CameraMount_printAllEEPROM(cameraMount);
                 break;
             case _T('q'):
                 flagExitMenu = TRUE;
@@ -143,7 +144,7 @@ int _tmain(int argc, _TCHAR* argv[])
     }
 
     /* カメラマウントコントローラを接続しているシリアルポートを閉じる */
-    CameraMount_close(&cameraMount);
+    CameraMount_close(cameraMount);
 
     exit(EXIT_SUCCESS);
 }

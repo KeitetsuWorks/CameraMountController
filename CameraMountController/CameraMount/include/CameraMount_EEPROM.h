@@ -108,58 +108,58 @@ DWORD CameraMount_getEEPROMSize(DWORD eepromIndex);
 
 /**
  * @brief   EEPROM読込み処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @param[in]       eepromIndex     EEPROMインデックス
  * @return          EEPROM読込みデータ格納先のポインタ
  */
-LPVOID CameraMount_readEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex);
+LPVOID CameraMount_readEEPROM(CAMERAMOUNT cameraMount, DWORD eepromIndex);
 
 
 /**
  * @brief   EEPROM書込み処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @param[in]       eepromIndex     EEPROMインデックス
  * @param[in]       data            EEPROM書込みデータ格納先のポインタ
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CameraMount_writeEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex, LPVOID data);
+BOOL CameraMount_writeEEPROM(CAMERAMOUNT cameraMount, DWORD eepromIndex, LPVOID data);
 
 
 /**
  * @brief   EEPROMデータ表示処理（EEPROMインデックス指定）
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @param[in]       eepromIndex     EEPROMインデックス
  */
-VOID CameraMount_printEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex);
+VOID CameraMount_printEEPROM_i(CAMERAMOUNT cameraMount, DWORD eepromIndex);
 
 
 /**
  * @brief   EEPROMデータ表示処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  */
-VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount);
+VOID CameraMount_printEEPROM(CAMERAMOUNT cameraMount);
 
 
 /**
  * @brief   全EEPROMデータ表示処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  */
-VOID CameraMount_printAllEEPROM(CAMERAMOUNT_T *cameraMount);
+VOID CameraMount_printAllEEPROM(CAMERAMOUNT cameraMount);
 
 
 /**
  * @brief   レジスタデータ編集処理（EEPROMインデックス指定）
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @param[in]       eepromIndex     EEPROMインデックス
  */
-BOOL CameraMount_editEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex);
+BOOL CameraMount_editEEPROM_i(CAMERAMOUNT cameraMount, DWORD eepromIndex);
 
 
 /**
  * @brief   レジスタデータ編集処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  */
-BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount);
+BOOL CameraMount_editEEPROM(CAMERAMOUNT cameraMount);
 
 #endif  /* __CAMERAMOUNT_EEPROM_H__ */

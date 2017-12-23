@@ -22,14 +22,14 @@
 
 /**
  * @brief   コマンドを送信する
- * @param[in]       cmdIF               コマンドインタフェース情報構造体
+ * @param[in]       cmdIF               コマンドインタフェース情報構造体のポインタ
  * @param[in]       commandOpcode       コマンドオペコード
  * @param[in]       commandOperand      コマンドオペランド格納先のポインタ
  * @param[in]       commandOperandBytes コマンドオペランドのバイト数
  * @retval          TRUE                正常終了
  * @retval          FALSE               異常終了
  */
-static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandBytes);
+static BOOL CommandIF_sendCommand(COMMANDIF cmdIF, BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandBytes);
 
 
 /**
@@ -45,10 +45,10 @@ static LPBYTE CommandIF_createCommand(BYTE commandOpcode, LPBYTE commandOperand,
 
 /**
  * @brief   レスポンスを受信する
- * @param[in]       cmdIF               コマンドインタフェース情報構造体
+ * @param[in]       cmdIF               コマンドインタフェース情報構造体のポインタ
  * @return          レスポンス
  */
-static LPBYTE CommandIF_receiveResponse(COMMANDIF_T *cmdIF);
+static LPBYTE CommandIF_receiveResponse(COMMANDIF cmdIF);
 
 
 /**
@@ -67,71 +67,65 @@ static BYTE CommandIF_getCommandResult(LPBYTE response);
 static DWORD CommandIF_getResponseBytes(LPBYTE response);
 
 
-BOOL CommandIF_open(COMMANDIF_T *cmdIF, LPCTSTR comName)
+COMMANDIF CommandIF_open(LPCTSTR comName)
 {
-    BOOL retval;
-    BOOL result;
+    COMMANDIF cmdIF;
 
-    result = TRUE;
-
-    if (cmdIF != NULL) {
-        /* シリアルポートのハンドラの初期化 */
-        cmdIF->comPort.comHandle = INVALID_HANDLE_VALUE;
-
-        /* シリアルポートの制御設定（コマンドインタフェース向け） */
-        cmdIF->comPort.comRxBufSize = 8192;
-        cmdIF->comPort.comTxBufSize = 8192;
-        cmdIF->comPort.comBaudRate = CBR_9600;
-        cmdIF->comPort.comByteSize = 8;
-        cmdIF->comPort.comParity = NOPARITY;
-        cmdIF->comPort.comStopBits = ONESTOPBIT;
-
-        /* デバイス情報の初期化 */
-        cmdIF->deviceType = 0;
-        cmdIF->deviceVersion = 0;
-        cmdIF->deviceRevision = 0;
-
-        /* シリアルポートを開く */
-        retval = ComPort_openComPort(&(cmdIF->comPort), comName);
-        if (retval == FALSE) {
-            result = FALSE;
-        }
+    /* インスタンスの生成 */
+    cmdIF = (COMMANDIF)malloc(sizeof(COMMANDIF_T));
+    if (cmdIF == NULL) {
+        return NULL;
     }
-    else {
-        result = FALSE;
-    }
+    ZeroMemory(cmdIF, sizeof(COMMANDIF_T));
 
-    return result;
+    /* デバイス情報の初期化 */
+    cmdIF->deviceType = 0;
+    cmdIF->deviceVersion = 0;
+    cmdIF->deviceRevision = 0;
+
+    /* シリアルポートを開く */
+    cmdIF->comPort = ComPort_openComPort(comName, CBR_9600);
+    if (cmdIF->comPort == NULL) {
+        free(cmdIF);
+        return NULL;
+    }
+    
+    /* シリアルポートの制御設定（コマンドインタフェース向け） */
+    cmdIF->comPort->comBaudRate = CBR_9600;
+    cmdIF->comPort->comByteSize = 8;
+    cmdIF->comPort->comParity = NOPARITY;
+    cmdIF->comPort->comStopBits = ONESTOPBIT;
+    ComPort_setDCB(cmdIF->comPort);
+
+    return cmdIF;
 }
 
 
-BOOL CommandIF_close(COMMANDIF_T *cmdIF)
+COMMANDIF CommandIF_close(COMMANDIF cmdIF)
 {
-    BOOL result;
-
-    result = TRUE;
-
     if (cmdIF != NULL) {
-        result = ComPort_closeComPort(&(cmdIF->comPort));
+        ComPort_closeComPort(cmdIF->comPort);
+        free(cmdIF);
+        cmdIF = NULL;
     }
 
-    return result;
+    return cmdIF;
 }
 
 
-BOOL CommandIF_execCommand_ResetDevice(COMMANDIF_T *cmdIF)
+BOOL CommandIF_execCommand_ResetDevice(COMMANDIF cmdIF)
 {
     return CommandIF_sendCommand(cmdIF, COMMAND_RESET, NULL, 0);
 }
 
 
-BOOL CommandIF_execCommand_InitializeSystem(COMMANDIF_T *cmdIF)
+BOOL CommandIF_execCommand_InitializeSystem(COMMANDIF cmdIF)
 {
     return CommandIF_sendCommand(cmdIF, COMMAND_INITIALIZE, NULL, 0);
 }
 
 
-BOOL CommandIF_execCommand_GetVersion(COMMANDIF_T *cmdIF)
+BOOL CommandIF_execCommand_GetVersion(COMMANDIF cmdIF)
 {
     BYTE commandResult;
     DWORD responseBytes;
@@ -174,7 +168,7 @@ BOOL CommandIF_execCommand_GetVersion(COMMANDIF_T *cmdIF)
 }
 
 
-LPBYTE CommandIF_execCommand_ReadRegister(COMMANDIF_T *cmdIF, DWORD registerIndex, LPDWORD readBytes)
+LPBYTE CommandIF_execCommand_ReadRegister(COMMANDIF cmdIF, DWORD registerIndex, LPDWORD readBytes)
 {
     BYTE commandOperand;
     LPBYTE response;
@@ -230,7 +224,7 @@ LPBYTE CommandIF_execCommand_ReadRegister(COMMANDIF_T *cmdIF, DWORD registerInde
 }
 
 
-BOOL CommandIF_execCommand_WriteRegister(COMMANDIF_T *cmdIF, DWORD registerIndex, LPVOID data, DWORD dataBytes)
+BOOL CommandIF_execCommand_WriteRegister(COMMANDIF cmdIF, DWORD registerIndex, LPVOID data, DWORD dataBytes)
 {
     DWORD commandOperandBytes;
     LPBYTE commandOperand;
@@ -296,7 +290,7 @@ BOOL CommandIF_execCommand_WriteRegister(COMMANDIF_T *cmdIF, DWORD registerIndex
 }
 
 
-LPBYTE CommandIF_execCommand_ReadEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, LPDWORD readBytes)
+LPBYTE CommandIF_execCommand_ReadEEPROM(COMMANDIF cmdIF, DWORD eepromIndex, LPDWORD readBytes)
 {
     BYTE commandOperand;
     LPBYTE response;
@@ -352,7 +346,7 @@ LPBYTE CommandIF_execCommand_ReadEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, L
 }
 
 
-BOOL CommandIF_execCommand_WriteEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, LPVOID data, DWORD dataBytes)
+BOOL CommandIF_execCommand_WriteEEPROM(COMMANDIF cmdIF, DWORD eepromIndex, LPVOID data, DWORD dataBytes)
 {
     DWORD commandOperandBytes;
     LPBYTE commandOperand;
@@ -418,7 +412,7 @@ BOOL CommandIF_execCommand_WriteEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, LP
 }
 
 
-static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandBytes)
+static BOOL CommandIF_sendCommand(COMMANDIF cmdIF, BYTE commandOpcode, LPBYTE commandOperand, DWORD commandOperandBytes)
 {
     LPBYTE command;
     DWORD commandBytes;
@@ -426,14 +420,14 @@ static BOOL CommandIF_sendCommand(COMMANDIF_T *cmdIF, BYTE commandOpcode, LPBYTE
 
     result = TRUE;
 
-    if (cmdIF->comPort.comHandle != INVALID_HANDLE_VALUE) {
+    if (cmdIF->comPort->comHandle != INVALID_HANDLE_VALUE) {
         /* コマンドを作成 */
         command = CommandIF_createCommand(commandOpcode, commandOperand, commandOperandBytes, &commandBytes);
 
         /* コマンドを送信 */
         if (command != NULL) {
             result = ComPort_writeData(
-                &(cmdIF->comPort),
+                cmdIF->comPort,
                 command,
                 commandBytes
             );
@@ -490,7 +484,7 @@ static LPBYTE CommandIF_createCommand(BYTE commandOpcode, LPBYTE commandOperand,
 }
 
 
-static LPBYTE CommandIF_receiveResponse(COMMANDIF_T *cmdIF)
+static LPBYTE CommandIF_receiveResponse(COMMANDIF cmdIF)
 {
     BYTE responseHeader;
     DWORD responseBytes;
@@ -499,11 +493,11 @@ static LPBYTE CommandIF_receiveResponse(COMMANDIF_T *cmdIF)
 
     response = NULL;
 
-    if (cmdIF->comPort.comHandle != INVALID_HANDLE_VALUE) {
+    if (cmdIF->comPort->comHandle != INVALID_HANDLE_VALUE) {
         /* レスポンスヘッダを受信 */
         responseHeader = 0x00;
         retval = ComPort_readData(
-            &(cmdIF->comPort),
+            cmdIF->comPort,
             &responseHeader,
             1
         );
@@ -528,7 +522,7 @@ static LPBYTE CommandIF_receiveResponse(COMMANDIF_T *cmdIF)
         /* レスポンスの続きを受信 */
         if ((response != NULL) && (responseBytes > 1)) {
             retval = ComPort_readData(
-                &(cmdIF->comPort),
+                cmdIF->comPort,
                 &response[1],
                 (responseBytes - 1)
             );

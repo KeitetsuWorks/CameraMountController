@@ -73,7 +73,7 @@ DWORD CameraMount_getRegisterSize(DWORD registerIndex)
 }
 
 
-LPVOID CameraMount_readRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
+LPVOID CameraMount_readRegister(CAMERAMOUNT cameraMount, DWORD registerIndex)
 {
     DWORD registerSize;
     DWORD readBytes;
@@ -86,7 +86,7 @@ LPVOID CameraMount_readRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
 
     /* レジスタ読込みを実行 */
     if (registerSize > 0) {
-        result = (LPVOID)CommandIF_execCommand_ReadRegister(&(cameraMount->cmdIF), registerIndex, &readBytes);
+        result = (LPVOID)CommandIF_execCommand_ReadRegister(cameraMount->cmdIF, registerIndex, &readBytes);
         if (readBytes != registerSize) {
             free(result);
             result = NULL;
@@ -97,7 +97,7 @@ LPVOID CameraMount_readRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
 }
 
 
-BOOL CameraMount_writeRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex, LPVOID data)
+BOOL CameraMount_writeRegister(CAMERAMOUNT cameraMount, DWORD registerIndex, LPVOID data)
 {
     DWORD registerSize;
     BOOL result;
@@ -109,7 +109,7 @@ BOOL CameraMount_writeRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex, 
 
     /* レジスタ書込みを実行 */
     if (registerSize > 0) {
-        result = CommandIF_execCommand_WriteRegister(&(cameraMount->cmdIF), registerIndex, data, registerSize);
+        result = CommandIF_execCommand_WriteRegister(cameraMount->cmdIF, registerIndex, data, registerSize);
     }
     else {
         result = FALSE;
@@ -119,7 +119,7 @@ BOOL CameraMount_writeRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex, 
 }
 
 
-VOID CameraMount_printRegister_i(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
+VOID CameraMount_printRegister_i(CAMERAMOUNT cameraMount, DWORD registerIndex)
 {
     DATA32_U *registerData;
 
@@ -175,7 +175,7 @@ VOID CameraMount_printRegister_i(CAMERAMOUNT_T *cameraMount, DWORD registerIndex
 }
 
 
-VOID CameraMount_printRegister(CAMERAMOUNT_T *cameraMount)
+VOID CameraMount_printRegister(CAMERAMOUNT cameraMount)
 {
     DWORD numberOfFields;
     DWORD registerIndex;
@@ -203,7 +203,7 @@ VOID CameraMount_printRegister(CAMERAMOUNT_T *cameraMount)
 }
 
 
-VOID CameraMount_printAllRegister(CAMERAMOUNT_T *cameraMount)
+VOID CameraMount_printAllRegister(CAMERAMOUNT cameraMount)
 {
     DWORD registerIndex;
 
@@ -215,7 +215,7 @@ VOID CameraMount_printAllRegister(CAMERAMOUNT_T *cameraMount)
 }
 
 
-BOOL CameraMount_editRegister_i(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
+BOOL CameraMount_editRegister_i(CAMERAMOUNT cameraMount, DWORD registerIndex)
 {
     DATA32_U data;
     DWORD numberOfFields;
@@ -295,7 +295,7 @@ BOOL CameraMount_editRegister_i(CAMERAMOUNT_T *cameraMount, DWORD registerIndex)
 }
 
 
-BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount)
+BOOL CameraMount_editRegister(CAMERAMOUNT cameraMount)
 {
     DWORD numberOfFields;
     DWORD registerIndex;

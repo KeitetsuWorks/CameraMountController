@@ -38,13 +38,16 @@
  *
  * @typedef COMMANDIF_T
  * @brief   コマンドインタフェース情報構造体
+ *
+ * @typedef COMMANDIF
+ * @brief   コマンドインタフェース情報構造体のポインタ
  */
 typedef struct CommandIF_st {
-    COMPORT_T comPort;              /*!< シリアルポート情報構造体 */
+    COMPORT comPort;                /*!< シリアルポート情報構造体のポインタ */
     BYTE deviceType;                /*!< デバイスタイプ */
     BYTE deviceVersion;             /*!< デバイスバージョン */
     BYTE deviceRevision;            /*!< デバイスリビジョン */
-} COMMANDIF_T;
+} COMMANDIF_T, *COMMANDIF;
 
 
 /**
@@ -66,91 +69,90 @@ typedef union data32_u {
 
 /**
  * @brief   コマンドインタフェースを開く
- * @param[in,out]   cmdIF           コマンドインタフェース情報構造体
  * @param[in]       comName         シリアルポート名
- * @retval          TRUE            正常終了
- * @retval          FALSE           異常終了
+ * @retval          NULL            異常終了
+ * @retval          Others          コマンドインタフェース情報構造体のポインタ
  */
-BOOL CommandIF_open(COMMANDIF_T *cmdIF, LPCTSTR comName);
+COMMANDIF CommandIF_open(LPCTSTR comName);
 
 
 /**
  * @brief   コマンドインタフェースを閉じる
- * @param[in,out]   cmdIF           コマンドインタフェース情報構造体
- * @retval          TRUE            正常終了
- * @retval          FALSE           異常終了
+ * @param[in]       cmdIF           コマンドインタフェース情報構造体のポインタ
+ * @retval          NULL            正常終了
+ * @retval          Others          異常終了
  */
-BOOL CommandIF_close(COMMANDIF_T *cmdIF);
+COMMANDIF CommandIF_close(COMMANDIF cmdIF);
 
 
 /**
  * @brief   ソフトウェアリセットコマンドを実行する
- * @param[in]       cmdIF           コマンドインタフェース情報構造体
+ * @param[in]       cmdIF           コマンドインタフェース情報構造体のポインタ
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CommandIF_execCommand_ResetDevice(COMMANDIF_T *cmdIF);
+BOOL CommandIF_execCommand_ResetDevice(COMMANDIF cmdIF);
 
 
 /**
  * @brief   システム初期化コマンドを実行する
- * @param[in]       cmdIF           コマンドインタフェース情報構造体
+ * @param[in]       cmdIF           コマンドインタフェース情報構造体のポインタ
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CommandIF_execCommand_InitializeSystem(COMMANDIF_T *cmdIF);
+BOOL CommandIF_execCommand_InitializeSystem(COMMANDIF cmdIF);
 
 
 /**
  * @brief   バージョン情報取得コマンドを実行する
- * @param[in]       cmdIF           コマンドインタフェース情報構造体
+ * @param[in]       cmdIF           コマンドインタフェース情報構造体のポインタ
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CommandIF_execCommand_GetVersion(COMMANDIF_T *cmdIF);
+BOOL CommandIF_execCommand_GetVersion(COMMANDIF cmdIF);
 
 
 /**
  * @brief   レジスタ読込みコマンドを実行する
- * @param[in]       cmdIF           コマンドインタフェース情報構造体
+ * @param[in]       cmdIF           コマンドインタフェース情報構造体のポインタ
  * @param[in]       registerIndex   レジスタインデックス
  * @param[out]      readBytes       読込みバイト数
  * @return          レジスタ読込みデータ格納先のポインタ
  */
-LPBYTE CommandIF_execCommand_ReadRegister(COMMANDIF_T *cmdIF, DWORD registerIndex, LPDWORD readBytes);
+LPBYTE CommandIF_execCommand_ReadRegister(COMMANDIF cmdIF, DWORD registerIndex, LPDWORD readBytes);
 
 
 /**
  * @brief   レジスタ書込みコマンドを実行する
- * @param[in]       cmdIF           コマンドインタフェース情報構造体
+ * @param[in]       cmdIF           コマンドインタフェース情報構造体のポインタ
  * @param[in]       registerIndex   レジスタインデックス
  * @param[in]       data            レジスタ書込みデータ格納先のポインタ
  * @param[in]       dataBytes       レジスタ書込みデータのバイト数
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CommandIF_execCommand_WriteRegister(COMMANDIF_T *cmdIF, DWORD registerIndex, LPVOID data, DWORD dataBytes);
+BOOL CommandIF_execCommand_WriteRegister(COMMANDIF cmdIF, DWORD registerIndex, LPVOID data, DWORD dataBytes);
 
 
 /**
  * @brief   EEPROM読込みコマンドを実行する
- * @param[in]       cmdIF           コマンドインタフェース情報構造体
+ * @param[in]       cmdIF           コマンドインタフェース情報構造体のポインタ
  * @param[in]       eepromIndex     EEPROMインデックス
  * @param[out]      readBytes       読込みバイト数
  * @return          EEPROM読込みデータ格納先のポインタ
  */
-LPBYTE CommandIF_execCommand_ReadEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, LPDWORD readBytes);
+LPBYTE CommandIF_execCommand_ReadEEPROM(COMMANDIF cmdIF, DWORD eepromIndex, LPDWORD readBytes);
 
 
 /**
  * @brief   EEPROM書込みコマンドを実行する
- * @param[in]       cmdIF           コマンドインタフェース情報構造体
+ * @param[in]       cmdIF           コマンドインタフェース情報構造体のポインタ
  * @param[in]       eepromIndex     EEPROMインデックス
  * @param[in]       data            EEPROM書込みデータ格納先のポインタ
  * @param[in]       dataBytes       EEPROM書込みデータのバイト数
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CommandIF_execCommand_WriteEEPROM(COMMANDIF_T *cmdIF, DWORD eepromIndex, LPVOID data, DWORD dataBytes);
+BOOL CommandIF_execCommand_WriteEEPROM(COMMANDIF cmdIF, DWORD eepromIndex, LPVOID data, DWORD dataBytes);
 
 #endif	/* __CAMERAMOUNT_COMMANDIF_H__ */

@@ -16,31 +16,41 @@
 #include "CameraMount.h"
 
 
-BOOL CameraMount_open(CAMERAMOUNT_T *cameraMount, LPCTSTR comName)
+CAMERAMOUNT CameraMount_open(LPCTSTR comName)
 {
-    BOOL result;
+    CAMERAMOUNT cameraMount;
 
-    result = CommandIF_open(&(cameraMount->cmdIF), comName);
+    /* インスタンスの生成 */
+    cameraMount = (CAMERAMOUNT)malloc(sizeof(CAMERAMOUNT_T));
+    if (cameraMount == NULL) {
+        _tprintf(_T("カメラマウントコントローラのインスタンスの生成に失敗しました\n"));
+        return NULL;
+    }
+    ZeroMemory(cameraMount, sizeof(CAMERAMOUNT_T));
+
+    /* コマンドインタフェースを開く */
+    cameraMount->cmdIF = CommandIF_open(comName);
     _tprintf(_T("カメラマウントコントローラの接続に"));
-    if (result != FALSE) {
-        _tprintf(_T("成功しました"));
+    if (cameraMount->cmdIF != NULL) {
+        _tprintf(_T("成功しました\n"));
     }
     else {
-        _tprintf(_T("失敗しました"));
+        _tprintf(_T("失敗しました\n"));
+        free(cameraMount);
+        return NULL;
     }
-    _tprintf(_T("\n"));
 
-    return result;
+    return cameraMount;
 }
 
 
-BOOL CameraMount_close(CAMERAMOUNT_T *cameraMount)
+CAMERAMOUNT CameraMount_close(CAMERAMOUNT cameraMount)
 {
-    BOOL result;
-
-    result = CommandIF_close(&(cameraMount->cmdIF));
     _tprintf(_T("カメラマウントコントローラの切断に"));
-    if (result != FALSE) {
+    if (cameraMount != NULL) {
+        CommandIF_close(cameraMount->cmdIF);
+        free(cameraMount);
+        cameraMount = NULL;
         _tprintf(_T("成功しました"));
     }
     else {
@@ -48,32 +58,32 @@ BOOL CameraMount_close(CAMERAMOUNT_T *cameraMount)
     }
     _tprintf(_T("\n"));
 
-    return result;
+    return cameraMount;
 }
 
 
-BOOL CameraMount_reset(CAMERAMOUNT_T *cameraMount)
+BOOL CameraMount_reset(CAMERAMOUNT cameraMount)
 {
-    return CommandIF_execCommand_ResetDevice(&(cameraMount->cmdIF));
+    return CommandIF_execCommand_ResetDevice(cameraMount->cmdIF);
 }
 
 
-BOOL CameraMount_initialize(CAMERAMOUNT_T *cameraMount)
+BOOL CameraMount_initialize(CAMERAMOUNT cameraMount)
 {
-    return CommandIF_execCommand_InitializeSystem(&(cameraMount->cmdIF));
+    return CommandIF_execCommand_InitializeSystem(cameraMount->cmdIF);
 }
 
 
-VOID CameraMount_printVersion(CAMERAMOUNT_T *cameraMount)
+VOID CameraMount_printVersion(CAMERAMOUNT cameraMount)
 {
     BOOL retval;
 
-    retval = CommandIF_execCommand_GetVersion(&(cameraMount->cmdIF));
+    retval = CommandIF_execCommand_GetVersion(cameraMount->cmdIF);
     if (retval != FALSE) {
         _tprintf(_T("デバイスタイプ: 0x%02x, バージョン: %d.%d\n"),
-            cameraMount->cmdIF.deviceType,
-            cameraMount->cmdIF.deviceVersion,
-            cameraMount->cmdIF.deviceRevision
+            cameraMount->cmdIF->deviceType,
+            cameraMount->cmdIF->deviceVersion,
+            cameraMount->cmdIF->deviceRevision
         );
     }
     else {
@@ -84,18 +94,18 @@ VOID CameraMount_printVersion(CAMERAMOUNT_T *cameraMount)
 }
 
 
-BOOL CameraMount_validateVersion(CAMERAMOUNT_T *cameraMount)
+BOOL CameraMount_validateVersion(CAMERAMOUNT cameraMount)
 {
     BOOL retval;
     BOOL result;
 
     result = TRUE;
 
-    retval = CommandIF_execCommand_GetVersion(&(cameraMount->cmdIF));
+    retval = CommandIF_execCommand_GetVersion(cameraMount->cmdIF);
     if (retval != FALSE) {
-        if ((cameraMount->cmdIF.deviceType != CAMERAMOUNT_SUPPORTED_TYPE)
-            || (cameraMount->cmdIF.deviceVersion != CAMERAMOUNT_SUPPORTED_VERSION)
-            || (cameraMount->cmdIF.deviceRevision != CAMERAMOUNT_SUPPORTED_REVISION)) {
+        if ((cameraMount->cmdIF->deviceType != CAMERAMOUNT_SUPPORTED_TYPE)
+            || (cameraMount->cmdIF->deviceVersion != CAMERAMOUNT_SUPPORTED_VERSION)
+            || (cameraMount->cmdIF->deviceRevision != CAMERAMOUNT_SUPPORTED_REVISION)) {
             result = FALSE;
         }
     }

@@ -122,58 +122,58 @@ DWORD CameraMount_getRegisterSize(DWORD registerIndex);
 
 /**
  * @brief   レジスタ読込み処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @param[in]       registerIndex   レジスタインデックス
  * @return          レジスタ読込みデータ格納先のポインタ
  */
-LPVOID CameraMount_readRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex);
+LPVOID CameraMount_readRegister(CAMERAMOUNT cameraMount, DWORD registerIndex);
 
 
 /**
  * @brief   レジスタ書込み処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @param[in]       registerIndex   レジスタインデックス
  * @param[in]       data            レジスタ書込みデータ格納先のポインタ
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CameraMount_writeRegister(CAMERAMOUNT_T *cameraMount, DWORD registerIndex, LPVOID data);
+BOOL CameraMount_writeRegister(CAMERAMOUNT cameraMount, DWORD registerIndex, LPVOID data);
 
 
 /**
  * @brief   レジスタデータ表示処理（レジスタインデックス指定）
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @param[in]       registerIndex   レジスタインデックス
  */
-VOID CameraMount_printRegister_i(CAMERAMOUNT_T *cameraMount, DWORD registerIndex);
+VOID CameraMount_printRegister_i(CAMERAMOUNT cameraMount, DWORD registerIndex);
 
 
 /**
  * @brief   レジスタデータ表示処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  */
-VOID CameraMount_printRegister(CAMERAMOUNT_T *cameraMount);
+VOID CameraMount_printRegister(CAMERAMOUNT cameraMount);
 
 
 /**
  * @brief   全レジスタデータ表示処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  */
-VOID CameraMount_printAllRegister(CAMERAMOUNT_T *cameraMount);
+VOID CameraMount_printAllRegister(CAMERAMOUNT cameraMount);
 
 
 /**
  * @brief   レジスタデータ編集処理（レジスタインデックス指定）
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @param[in]       registerIndex   レジスタインデックス
  */
-BOOL CameraMount_editRegister_i(CAMERAMOUNT_T *cameraMount, DWORD registerIndex);
+BOOL CameraMount_editRegister_i(CAMERAMOUNT cameraMount, DWORD registerIndex);
 
 
 /**
  * @brief   レジスタデータ編集処理
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  */
-BOOL CameraMount_editRegister(CAMERAMOUNT_T *cameraMount);
+BOOL CameraMount_editRegister(CAMERAMOUNT cameraMount);
 
 #endif  /* __CAMERAMOUNT_REGISTER_H__ */

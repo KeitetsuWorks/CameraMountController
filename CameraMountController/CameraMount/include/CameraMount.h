@@ -30,62 +30,64 @@
  *
  * @typedef CAMERAMOUNT_T
  * @brief   カメラマウントコントローラ情報構造体
+ *
+ * @typedef CAMERAMOUNT
+ * @brief   カメラマウントコントローラ情報構造体のポインタ
  */
 typedef struct CameraMount_st {
-    COMMANDIF_T cmdIF;              /*!< コマンドインタフェース情報構造体 */
-} CAMERAMOUNT_T;
+    COMMANDIF cmdIF;                /*!< コマンドインタフェース情報構造体のポインタ */
+} CAMERAMOUNT_T, *CAMERAMOUNT;
 
 
 /**
  * @brief   カメラマウントコントローラを開く
- * @param[in,out]   cameraMount     カメラマウントコントローラ情報構造体
  * @param[in]       comName         シリアルポート名
- * @retval          TRUE            正常終了
- * @retval          FALSE           異常終了
+ * @retval          NULL            異常終了
+ * @retval          Others          カメラマウントコントローラ情報構造体のポインタ
  */
-BOOL CameraMount_open(CAMERAMOUNT_T *cameraMount, LPCTSTR comName);
+CAMERAMOUNT CameraMount_open(LPCTSTR comName);
 
 
 /**
  * @brief   カメラマウントコントローラを閉じる
- * @param[in,out]   cameraMount     カメラマウントコントローラ情報構造体
- * @retval          TRUE            正常終了
- * @retval          FALSE           異常終了
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
+ * @retval          NULL            正常終了
+ * @retval          Others          異常終了
  */
-BOOL CameraMount_close(CAMERAMOUNT_T *cameraMount);
+CAMERAMOUNT CameraMount_close(CAMERAMOUNT cameraMount);
 
 
 /**
  * @brief   カメラマウントコントローラをリセットする
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CameraMount_reset(CAMERAMOUNT_T *cameraMount);
+BOOL CameraMount_reset(CAMERAMOUNT cameraMount);
 
 
 /**
  * @brief   カメラマウントコントローラを初期化する
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @retval          TRUE            正常終了
  * @retval          FALSE           異常終了
  */
-BOOL CameraMount_initialize(CAMERAMOUNT_T *cameraMount);
+BOOL CameraMount_initialize(CAMERAMOUNT cameraMount);
 
 
 /**
  * @brief   カメラマウントコントローラのバージョン情報表示処理
- * @param[in,out]   cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in,out]   cameraMount     カメラマウントコントローラ情報構造体のポインタ
  */
-VOID CameraMount_printVersion(CAMERAMOUNT_T *cameraMount);
+VOID CameraMount_printVersion(CAMERAMOUNT cameraMount);
 
 
 /**
  * @brief   カメラマウントコントローラが対応バージョンか検証する
- * @param[in]       cameraMount     カメラマウントコントローラ情報構造体
+ * @param[in]       cameraMount     カメラマウントコントローラ情報構造体のポインタ
  * @retval          TRUE            対応バージョン
  * @retval          FALSE           非対応バージョン
  */
-BOOL CameraMount_validateVersion(CAMERAMOUNT_T *cameraMount);
+BOOL CameraMount_validateVersion(CAMERAMOUNT cameraMount);
 
 #endif  /* __CAMERAMOUNT_H__ */

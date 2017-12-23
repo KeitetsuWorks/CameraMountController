@@ -68,7 +68,7 @@ DWORD CameraMount_getEEPROMSize(DWORD eepromIndex)
 }
 
 
-LPVOID CameraMount_readEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
+LPVOID CameraMount_readEEPROM(CAMERAMOUNT cameraMount, DWORD eepromIndex)
 {
     DWORD eepromSize;
     DWORD readBytes;
@@ -81,7 +81,7 @@ LPVOID CameraMount_readEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
 
     /* EEPROM“Çž‚Ý‚ðŽÀs */
     if (eepromSize > 0) {
-        result = (LPVOID)CommandIF_execCommand_ReadEEPROM(&(cameraMount->cmdIF), eepromIndex, &readBytes);
+        result = (LPVOID)CommandIF_execCommand_ReadEEPROM(cameraMount->cmdIF, eepromIndex, &readBytes);
         if (readBytes != eepromSize) {
             free(result);
             result = NULL;
@@ -92,7 +92,7 @@ LPVOID CameraMount_readEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
 }
 
 
-BOOL CameraMount_writeEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex, LPVOID data)
+BOOL CameraMount_writeEEPROM(CAMERAMOUNT cameraMount, DWORD eepromIndex, LPVOID data)
 {
     DWORD eepromSize;
     BOOL result;
@@ -104,7 +104,7 @@ BOOL CameraMount_writeEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex, LPVO
 
     /* EEPORM‘ž‚Ý‚ðŽÀs */
     if (eepromSize > 0) {
-        result = CommandIF_execCommand_WriteEEPROM(&(cameraMount->cmdIF), eepromIndex, data, eepromSize);
+        result = CommandIF_execCommand_WriteEEPROM(cameraMount->cmdIF, eepromIndex, data, eepromSize);
     }
     else {
         result = FALSE;
@@ -114,7 +114,7 @@ BOOL CameraMount_writeEEPROM(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex, LPVO
 }
 
 
-VOID CameraMount_printEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
+VOID CameraMount_printEEPROM_i(CAMERAMOUNT cameraMount, DWORD eepromIndex)
 {
     DATA32_U *eepromData;
 
@@ -170,7 +170,7 @@ VOID CameraMount_printEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
 }
 
 
-VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount)
+VOID CameraMount_printEEPROM(CAMERAMOUNT cameraMount)
 {
     DWORD numberOfFields;
     DWORD eepromIndex;
@@ -198,7 +198,7 @@ VOID CameraMount_printEEPROM(CAMERAMOUNT_T *cameraMount)
 }
 
 
-VOID CameraMount_printAllEEPROM(CAMERAMOUNT_T *cameraMount)
+VOID CameraMount_printAllEEPROM(CAMERAMOUNT cameraMount)
 {
     DWORD eepromIndex;
 
@@ -210,7 +210,7 @@ VOID CameraMount_printAllEEPROM(CAMERAMOUNT_T *cameraMount)
 }
 
 
-BOOL CameraMount_editEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
+BOOL CameraMount_editEEPROM_i(CAMERAMOUNT cameraMount, DWORD eepromIndex)
 {
     DATA32_U data;
     DWORD numberOfFields;
@@ -290,7 +290,7 @@ BOOL CameraMount_editEEPROM_i(CAMERAMOUNT_T *cameraMount, DWORD eepromIndex)
 }
 
 
-BOOL CameraMount_editEEPROM(CAMERAMOUNT_T *cameraMount)
+BOOL CameraMount_editEEPROM(CAMERAMOUNT cameraMount)
 {
     DWORD numberOfFields;
     DWORD eepromIndex;
