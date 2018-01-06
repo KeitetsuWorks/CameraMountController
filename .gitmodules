@@ -1,0 +1,3 @@
+[submodule "CameraMountController/ComPort"]
+	path = CameraMountController/ComPort
+	url = https://github.com/KeitetsuWorks/ComPort_Win32.git
