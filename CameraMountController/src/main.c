@@ -31,8 +31,10 @@
 #define COMNAME_BUF_SIZE            16                  /*!< シリアルポート名バッファのサイズ */
 #define MENU_INPUT_BUF_SIZE         16                  /*!< メニュー入力バッファのサイズ */
 
+
 LPCTSTR iniFileName = _T(INI_FILE_NAME);                /*!< 設定ファイル名 */
 LPCTSTR comNameDefault = _T("\\\\.\\COM1");             /*!< 既定のシリアルポート名 */
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
