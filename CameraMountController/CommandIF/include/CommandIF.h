@@ -19,17 +19,17 @@
 /**
  * @name    コマンドフォーマット
  */
-/*! @{ */
-#define COMMAND_LENGTH_MAX              6       /*!< 最大コマンド長 */
-/*! @} */
+/** @{ */
+#define COMMAND_LENGTH_MAX              6       /**< 最大コマンド長 */
+/** @} */
 
 
 /**
  * @name    コマンドレスポンスフォーマット
  */
-/*! @{ */
-#define RESPONSE_LENGTH_MAX             6       /*!< 最大レスポンス長 */
-/*! @} */
+/** @{ */
+#define RESPONSE_LENGTH_MAX             6       /**< 最大レスポンス長 */
+/** @} */
 
 
 /**
@@ -43,10 +43,10 @@
  * @brief   コマンドインタフェース情報構造体のポインタ
  */
 typedef struct CommandIF_st {
-    COMPORT comPort;                /*!< シリアルポート情報構造体のポインタ */
-    BYTE deviceType;                /*!< デバイスタイプ */
-    BYTE deviceVersion;             /*!< デバイスバージョン */
-    BYTE deviceRevision;            /*!< デバイスリビジョン */
+    COMPORT comPort;                /**< シリアルポート情報構造体のポインタ */
+    BYTE deviceType;                /**< デバイスタイプ */
+    BYTE deviceVersion;             /**< デバイスバージョン */
+    BYTE deviceRevision;            /**< デバイスリビジョン */
 } COMMANDIF_T, *COMMANDIF;
 
 
@@ -58,12 +58,12 @@ typedef struct CommandIF_st {
  * @brief   32bit共用体
  */
 typedef union data32_u {
-    int32_t _s32;                   /*!< 符号あり，32bit */
-    uint32_t _u32;                  /*!< 符号なし，32bit */
-    int16_t _s16[2];                /*!< 符号あり，16bit */
-    uint16_t _u16[2];               /*!< 符号なし，16bit */
-    int8_t _s8[4];                  /*!< 符号あり，8bit */
-    uint8_t _u8[4];                 /*!< 符号なし，8bit */
+    int32_t _s32;                   /**< 符号あり，32bit */
+    uint32_t _u32;                  /**< 符号なし，32bit */
+    int16_t _s16[2];                /**< 符号あり，16bit */
+    uint16_t _u16[2];               /**< 符号なし，16bit */
+    int8_t _s8[4];                  /**< 符号あり，8bit */
+    uint8_t _u8[4];                 /**< 符号なし，8bit */
 } DATA32_U;
 
 

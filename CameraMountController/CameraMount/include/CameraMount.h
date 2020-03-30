@@ -17,11 +17,11 @@
 /**
  * @name    カメラマウントコントローラ対応バージョン
  */
-/*! @{ */
-#define CAMERAMOUNT_SUPPORTED_TYPE          0x43        /*!< デバイスタイプ */
-#define CAMERAMOUNT_SUPPORTED_VERSION       3           /*!< デバイスバージョン */
-#define CAMERAMOUNT_SUPPORTED_REVISION      0           /*!< デバイスリビジョン */
-/*! @} */
+/** @{ */
+#define CAMERAMOUNT_SUPPORTED_TYPE          0x43        /**< デバイスタイプ */
+#define CAMERAMOUNT_SUPPORTED_VERSION       3           /**< デバイスバージョン */
+#define CAMERAMOUNT_SUPPORTED_REVISION      0           /**< デバイスリビジョン */
+/** @} */
 
 
 /**
@@ -35,7 +35,7 @@
  * @brief   カメラマウントコントローラ情報構造体のポインタ
  */
 typedef struct CameraMount_st {
-    COMMANDIF cmdIF;                /*!< コマンドインタフェース情報構造体のポインタ */
+    COMMANDIF cmdIF;                /**< コマンドインタフェース情報構造体のポインタ */
 } CAMERAMOUNT_T, *CAMERAMOUNT;
 
 

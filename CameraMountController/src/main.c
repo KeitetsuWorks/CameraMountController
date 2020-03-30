@@ -22,18 +22,18 @@
 /**
  * @name    設定ファイル
  */
-/*! @{ */
-#define INI_FILE_NAME               "config.ini"        /*!< 設定ファイル名 */
-#define INI_COMPORT_SECTION         "ComPort"           /*!< シリアルポートセクション */
-#define INI_COMPORT_KEY_COMNAME     "ComName"           /*!< シリアルポート名キー */
-/*! @} */
+/** @{ */
+#define INI_FILE_NAME               "config.ini"        /**< 設定ファイル名 */
+#define INI_COMPORT_SECTION         "ComPort"           /**< シリアルポートセクション */
+#define INI_COMPORT_KEY_COMNAME     "ComName"           /**< シリアルポート名キー */
+/** @} */
 
-#define COMNAME_BUF_SIZE            16                  /*!< シリアルポート名バッファのサイズ */
-#define MENU_INPUT_BUF_SIZE         16                  /*!< メニュー入力バッファのサイズ */
+#define COMNAME_BUF_SIZE            16                  /**< シリアルポート名バッファのサイズ */
+#define MENU_INPUT_BUF_SIZE         16                  /**< メニュー入力バッファのサイズ */
 
 
-LPCTSTR iniFileName = _T(INI_FILE_NAME);                /*!< 設定ファイル名 */
-LPCTSTR comNameDefault = _T("\\\\.\\COM1");             /*!< 既定のシリアルポート名 */
+LPCTSTR iniFileName = _T(INI_FILE_NAME);                /**< 設定ファイル名 */
+LPCTSTR comNameDefault = _T("\\\\.\\COM1");             /**< 既定のシリアルポート名 */
 
 
 int _tmain(int argc, _TCHAR* argv[])
